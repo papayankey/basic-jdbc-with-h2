@@ -42,4 +42,65 @@ public class JdbcH2Test {
             assertThat(result).isFalse();
         }
     }
+
+    @Test
+    void testIfTableExists() throws SQLException {
+        try (var statement = connection.createStatement()) {
+            var sql = "SELECT * from students;";
+            try (var resultSet = statement.executeQuery(sql)) {
+                var index = resultSet.findColumn("id");
+                var firstName = resultSet.findColumn("first_name");
+                var lastName = resultSet.findColumn("last_name");
+
+                assertThat(index).isEqualTo(1);
+                assertThat(firstName).isEqualTo(2);
+                assertThat(lastName).isEqualTo(3);
+            }
+        }
+    }
+
+    @Test
+    void testDropTableIfExists() throws SQLException {
+        try (var statement = connection.createStatement()) {
+            var sql = "DROP TABLE IF EXISTS students;";
+            boolean result = statement.execute(sql);
+
+            assertThat(result).isFalse();
+        }
+    }
+
+    @Test
+    void testInsertData() throws SQLException {
+        try (var statement = connection.createStatement()) {
+            var sql = """
+                    INSERT INTO students (first_name, last_name)
+                    VALUES
+                        ('mia', 'yankey'),
+                        ('rebecca', 'attuah'),
+                        ('dominic', 'yankey');
+                    """;
+            var result = statement.execute(sql);
+
+            assertThat(result).isFalse();
+        }
+    }
+
+    @Test
+    void testGetData() throws SQLException {
+        try (var statement = connection.createStatement()) {
+            var sql = """
+                    SELECT id, first_name, last_name from students
+                    WHERE first_name='mia';
+                    """;
+
+            var resultSet = statement.executeQuery(sql);
+            resultSet.next();
+
+            var firstName = resultSet.getString("first_name");
+            var lastName = resultSet.getString("last_name");
+
+            assertThat(firstName).isEqualTo("mia");
+            assertThat(lastName).isEqualTo("yankey");
+        }
+    }
 }
