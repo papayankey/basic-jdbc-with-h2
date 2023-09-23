@@ -37,9 +37,9 @@ public class JdbcH2Test {
                     PRIMARY KEY(id)
                     );
                     """;
-            boolean result = statement.execute(sql);
+            int result = statement.executeUpdate(sql);
 
-            assertThat(result).isFalse();
+            assertThat(result).isZero();
         }
     }
 
@@ -63,9 +63,9 @@ public class JdbcH2Test {
     void testDropTableIfExists() throws SQLException {
         try (var statement = connection.createStatement()) {
             var sql = "DROP TABLE IF EXISTS students;";
-            boolean result = statement.execute(sql);
+            int result = statement.executeUpdate(sql);
 
-            assertThat(result).isFalse();
+            assertThat(result).isZero();
         }
     }
 
@@ -79,9 +79,9 @@ public class JdbcH2Test {
                         ('rebecca', 'attuah'),
                         ('dominic', 'yankey');
                     """;
-            var result = statement.execute(sql);
+            var result = statement.executeUpdate(sql);
 
-            assertThat(result).isFalse();
+            assertThat(result).isEqualTo(3);
         }
     }
 
