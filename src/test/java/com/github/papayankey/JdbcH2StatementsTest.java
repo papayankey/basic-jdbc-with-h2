@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JdbcH2Test {
+public class JdbcH2StatementsTest {
     private Connection connection;
 
     @BeforeEach
